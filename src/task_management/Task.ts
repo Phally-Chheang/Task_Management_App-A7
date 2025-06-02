@@ -2,7 +2,7 @@ import { Project } from "../project/Project";
 import { Comment } from "./Comment";
 import { Reminder } from "./Reminder";
 import { Attachment } from "./Attachment";
-import { Notification } from "./Notification";
+import { Notification } from "../activity/Notification";
 import { Label } from "../project/Label";
 import { User } from "../user/User";
 
