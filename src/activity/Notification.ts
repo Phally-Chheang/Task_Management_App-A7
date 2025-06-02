@@ -1,19 +1,35 @@
 export class Notification {
-    id: string;
-    message: string;
-    isRead: boolean;
+  private id: number;
+  private message: string;
+  private isRead: boolean;
 
-    constructor(id: string, message: string, isRead: boolean = false) {
-        this.id = id;
-        this.message = message;
-        this.isRead = isRead;
-    }
+  constructor(message: string, isRead: boolean = false) {
+    this.id = Date.now(); // Generate unique ID using timestamp
+    this.message = message;
+    this.isRead = isRead;
+  }
 
-    markAsRead(): void {
-        this.isRead = true;
-    }
+  getId(): number {
+    return this.id;
+  }
 
-    display(): string {
-        return `${this.isRead ? "[Read]" : "[Unread]"} ${this.message}`;
-    }
+  getMessage(): string {
+    return this.message;
+  }
+
+  setMessage(message: string): void {
+    this.message = message;
+  }
+
+  getIsRead(): boolean {
+    return this.isRead;
+  }
+
+  markAsRead(): void {
+    this.isRead = true;
+  }
+
+  display(): string {
+    return `${this.isRead ? "[Read]" : "[Unread]"} ${this.message}`;
+  }
 }
