@@ -1,4 +1,4 @@
-import { Task } from "../task/Task";
+import { Task } from "../task_management/Task";
 import { Report } from "../activity/Report";
 import { User } from "../user/User";
 

@@ -2,7 +2,9 @@ import { Project } from "../project/Project";
 import { Comment } from "./Comment";
 import { Reminder } from "./Reminder";
 import { Attachment } from "./Attachment";
+import { Notification } from "./Notification";
 import { Label } from "../project/Label";
+import { User } from "../user/User";
 
 export abstract class Task extends Project {
   private taskId: number;
@@ -15,7 +17,8 @@ export abstract class Task extends Project {
   private reminders: Reminder[];
   private attachments: Attachment[];
   private labels: Label[];
-
+  private notifications: Notification[] = [];
+  private assignedUsers: User[] = []; // Users assigned to this task
   constructor(
     projectId: number,
     projectName: string,
@@ -31,7 +34,8 @@ export abstract class Task extends Project {
     comments: Comment[] = [],
     reminders: Reminder[] = [],
     attachments: Attachment[] = [],
-    labels: Label[] = []
+    labels: Label[] = [],
+    notifications: Notification[] = []
   ) {
     super(projectId, projectName, projectDescription, startDate, endDate);
     this.taskId = taskId;
@@ -44,6 +48,38 @@ export abstract class Task extends Project {
     this.reminders = reminders;
     this.attachments = attachments;
     this.labels = labels;
+    this.notifications = notifications;
+    this.assignedUsers = []; // Initialize with an empty array
+
+  }
+
+   // User Management
+  assignUser(user: User): void {
+    if (!this.assignedUsers.includes(user)) {
+      this.assignedUsers.push(user);
+    }
+  }
+
+  getAssignedUsers(): User[] {
+    return this.assignedUsers;
+  }
+
+  // Comment Management
+  addComment(content: string, createdAt: Date): Comment {
+    const comment = new Comment(Date.now(), content, createdAt);
+    this.comments.push(comment);
+    return comment;
+  }
+
+  getComments(): Comment[] {
+    return this.comments;
+  }
+
+  // Attachment Management
+  addAttachment(fileName: string, fileUrl: string): Attachment {
+    const attachment = new Attachment(Date.now(), fileName, fileUrl);
+    this.attachments.push(attachment);
+    return attachment;
   }
 
   // Getters and Setters
@@ -91,14 +127,7 @@ export abstract class Task extends Project {
     this.status = status;
   }
 
-  getComments(): Comment[] {
-    return this.comments;
-  }
-
-  addComment(comment: Comment): void {
-    this.comments.push(comment);
-  }
-
+  
   getReminders(): Reminder[] {
     return this.reminders;
   }
@@ -111,8 +140,11 @@ export abstract class Task extends Project {
     return this.attachments;
   }
 
-  addAttachment(attachment: Attachment): void {
-    this.attachments.push(attachment);
+  getNotifications(): Notification[] {
+    return this.notifications;
+  }
+  addNotification(notification: Notification): void {
+    this.notifications.push(notification);
   }
 
   getLabels(): Label[] {
