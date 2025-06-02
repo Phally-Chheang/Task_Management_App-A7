@@ -1,4 +1,3 @@
-
 import { Project } from "../project/Project";
 import { Comment } from "./Comment";
 import { Reminder } from "./Reminder";
@@ -21,6 +20,8 @@ export abstract class Task extends Project {
     projectId: number,
     projectName: string,
     projectDescription: string,
+    startDate: Date,
+    endDate: Date,
     taskId: number,
     title: string,
     description: string,
@@ -32,7 +33,7 @@ export abstract class Task extends Project {
     attachments: Attachment[] = [],
     labels: Label[] = []
   ) {
-    super(projectId, projectName, projectDescription);
+    super(projectId, projectName, projectDescription, startDate, endDate);
     this.taskId = taskId;
     this.title = title;
     this.description = description;
@@ -46,7 +47,7 @@ export abstract class Task extends Project {
   }
 
   // Getters and Setters
-  public getTaskId(): number {
+  getTaskId(): number {
     return this.taskId;
   }
 
@@ -54,71 +55,76 @@ export abstract class Task extends Project {
     return this.title;
   }
 
-  public setTitle(title: string): void {
+  setTitle(title: string): void {
     this.title = title;
   }
 
-  public getDescription(): string {
+  getDescription(): string {
     return this.description;
   }
 
-  public setDescription(description: string): void {
+  setDescription(description: string): void {
     this.description = description;
   }
 
-  public getDueDate(): Date {
+  getDueDate(): Date {
     return this.dueDate;
   }
 
-  public setDueDate(dueDate: Date): void {
+  setDueDate(dueDate: Date): void {
     this.dueDate = dueDate;
   }
 
-  public getPriority(): string {
+  getPriority(): string {
     return this.priority;
   }
 
-  public setPriority(priority: string): void {
+  setPriority(priority: string): void {
     this.priority = priority;
   }
 
-  public getStatus(): string {
+  getStatus(): string {
     return this.status;
   }
 
-  public setStatus(status: string): void {
+  setStatus(status: string): void {
     this.status = status;
   }
 
-  public getComments(): Comment[] {
+  getComments(): Comment[] {
     return this.comments;
   }
 
-  public addComment(comment: Comment): void {
+  addComment(comment: Comment): void {
     this.comments.push(comment);
   }
 
-  public getReminders(): Reminder[] {
+  getReminders(): Reminder[] {
     return this.reminders;
   }
 
-  public addReminder(reminder: Reminder): void {
+  addReminder(reminder: Reminder): void {
     this.reminders.push(reminder);
   }
 
-  public getAttachments(): Attachment[] {
+  getAttachments(): Attachment[] {
     return this.attachments;
   }
 
-  public addAttachment(attachment: Attachment): void {
+  addAttachment(attachment: Attachment): void {
     this.attachments.push(attachment);
   }
 
-  public getLabels(): Label[] {
+  getLabels(): Label[] {
     return this.labels;
   }
 
-  public addLabel(label: Label): void {
+  addLabel(label: Label): void {
     this.labels.push(label);
+  }
+
+
+  markComplete(): void {
+    this.status = "Completed";
   }
 }
