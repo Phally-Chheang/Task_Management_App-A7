@@ -1,3 +1,4 @@
+// ↙ Task.ts ↘
 import { Project } from "../project/Project";
 import { Comment } from "./Comment";
 import { Reminder } from "./Reminder";
@@ -5,20 +6,22 @@ import { Attachment } from "./Attachment";
 import { Notification } from "../activity/Notification";
 import { Label } from "../project/Label";
 import { User } from "../user/User";
+import { Priority, Status } from "../enums";
 
-export abstract class Task extends Project {
+export class Task extends Project {
   private taskId: number;
   private title: string;
   protected description: string;
   private dueDate: Date;
-  private priority: string;
-  private status: string;
-  private comments: Comment[];
-  private reminders: Reminder[];
-  private attachments: Attachment[];
-  private labels: Label[];
+  private priority: Priority;
+  private status: Status;
+  private comments: Comment[]    = [];
+  private reminders: Reminder[]  = [];
+  private attachments: Attachment[] = [];
+  private labels: Label[]        = [];
   private notifications: Notification[] = [];
-  private assignedUsers: User[] = []; // Users assigned to this task
+  private assignedUsers: User[]  = [];
+
   constructor(
     projectId: number,
     projectName: string,
@@ -29,31 +32,30 @@ export abstract class Task extends Project {
     title: string,
     description: string,
     dueDate: Date,
-    priority: string,
-    status: string,
-    comments: Comment[] = [],
-    reminders: Reminder[] = [],
+    priority: Priority,
+    status: Status,
+    comments: Comment[]     = [],
+    reminders: Reminder[]   = [],
     attachments: Attachment[] = [],
-    labels: Label[] = [],
-    notifications: Notification[] = []
+    labels: Label[]         = [],
+    notifications: Notification[] = [],
+    assignedUsers: User[]   = []
   ) {
     super(projectId, projectName, projectDescription, startDate, endDate);
-    this.taskId = taskId;
-    this.title = title;
-    this.description = description;
-    this.dueDate = dueDate;
-    this.priority = priority;
-    this.status = status;
-    this.comments = comments;
-    this.reminders = reminders;
-    this.attachments = attachments;
-    this.labels = labels;
+    this.taskId       = taskId;
+    this.title        = title;
+    this.description  = description;
+    this.dueDate      = dueDate;
+    this.priority     = priority;
+    this.status       = status;
+    this.comments     = comments;
+    this.reminders    = reminders;
+    this.attachments  = attachments;
+    this.labels       = labels;
     this.notifications = notifications;
-    this.assignedUsers = []; // Initialize with an empty array
-
+    this.assignedUsers = assignedUsers;
   }
 
-   // User Management
   assignUser(user: User): void {
     if (!this.assignedUsers.includes(user)) {
       this.assignedUsers.push(user);
@@ -64,9 +66,38 @@ export abstract class Task extends Project {
     return this.assignedUsers;
   }
 
-  // Comment Management
-  addComment(content: string, createdAt: Date): Comment {
-    const comment = new Comment(Date.now(), content, createdAt);
+  addComment(
+    projectId: number,
+    taskId: number,
+    userId: number,
+    content: string,
+    createdAt: Date,
+    updatedAt: Date,
+    isEdited: boolean,
+    isPinned: boolean,
+    parentCommentId: number | null,
+    likes: number,
+    dislikes: number,
+    attachments: Attachment[] = [],
+    mentions: User[] = [],
+    reactions: any[] = []
+  ): Comment {
+    const comment = new Comment(
+      Date.now(), // commentId
+      content,
+      createdAt,
+      projectId,
+      this.getProjectName ? this.getProjectName() : '',
+      this.getDescription ? this.getDescription() : '',
+      new Date(), // startDate
+      new Date(), // endDate
+      taskId,
+      this.getTitle(),
+      this.getDescription(),
+      this.getDueDate(),
+      this.getPriority(),
+      this.getStatus()
+    );
     this.comments.push(comment);
     return comment;
   }
@@ -75,19 +106,59 @@ export abstract class Task extends Project {
     return this.comments;
   }
 
-  // Attachment Management
   addAttachment(fileName: string, fileUrl: string): Attachment {
-    const attachment = new Attachment(Date.now(), fileName, fileUrl);
+    // Create a minimal concrete Attachment class inline for demonstration
+    class SimpleAttachment extends Attachment {
+      constructor(id: number, fileName: string, fileUrl: string) {
+        // Provide dummy values for abstract Attachment's super constructor
+        super(0, '', '', new Date(), new Date(), 0, '', '', new Date(), '', '', id, fileName, fileUrl);
+      }
+      public getAttachmentDetails(): string {
+        return `${this.getFileName()} (${this.getFileUrl()})`;
+      }
+      public setAttachmentDetails(fileName: string, fileUrl: string): void {
+        this.setFileName(fileName);
+        this.setFileUrl(fileUrl);
+      }
+    }
+    const attachment = new SimpleAttachment(Date.now(), fileName, fileUrl);
     this.attachments.push(attachment);
     return attachment;
   }
 
-  // Getters and Setters
+  getAttachments(): Attachment[] {
+    return this.attachments;
+  }
+
+  getReminders(): Reminder[] {
+    return this.reminders;
+  }
+
+  addReminder(reminder: Reminder): void {
+    this.reminders.push(reminder);
+  }
+
+  getLabels(): Label[] {
+    return this.labels;
+  }
+
+  addLabel(label: Label): void {
+    this.labels.push(label);
+  }
+
+  getNotifications(): Notification[] {
+    return this.notifications;
+  }
+
+  addNotification(notification: Notification): void {
+    this.notifications.push(notification);
+  }
+
   getTaskId(): number {
     return this.taskId;
   }
 
-  public getTitle(): string {
+  getTitle(): string {
     return this.title;
   }
 
@@ -111,52 +182,23 @@ export abstract class Task extends Project {
     this.dueDate = dueDate;
   }
 
-  getPriority(): string {
+  getPriority(): Priority {
     return this.priority;
   }
 
-  setPriority(priority: string): void {
+  setPriority(priority: Priority): void {
     this.priority = priority;
   }
 
-  getStatus(): string {
+  getStatus(): Status {
     return this.status;
   }
 
-  setStatus(status: string): void {
+  setStatus(status: Status): void {
     this.status = status;
   }
 
-  
-  getReminders(): Reminder[] {
-    return this.reminders;
-  }
-
-  addReminder(reminder: Reminder): void {
-    this.reminders.push(reminder);
-  }
-
-  getAttachments(): Attachment[] {
-    return this.attachments;
-  }
-
-  getNotifications(): Notification[] {
-    return this.notifications;
-  }
-  addNotification(notification: Notification): void {
-    this.notifications.push(notification);
-  }
-
-  getLabels(): Label[] {
-    return this.labels;
-  }
-
-  addLabel(label: Label): void {
-    this.labels.push(label);
-  }
-
-
   markComplete(): void {
-    this.status = "Completed";
+    this.status = Status.DONE;
   }
 }

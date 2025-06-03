@@ -3,6 +3,9 @@ import { Report } from "../activity/Report";
 import { User } from "../user/User";
 
 export class Project {
+    getProjectName(): string {
+      throw new Error("Method not implemented.");
+    }
     protected projectId: number;
     protected name: string;
     protected description: string;
