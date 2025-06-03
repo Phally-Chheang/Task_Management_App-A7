@@ -6,7 +6,6 @@ import { Attachment } from "./Attachment";
 import { Notification } from "../activity/Notification";
 import { Label } from "../project/Label";
 import { User } from "../user/User";
-import { Priority, Status } from "../enums";
 
 export class Task extends Project {
   private taskId: number;
@@ -111,7 +110,7 @@ export class Task extends Project {
     class SimpleAttachment extends Attachment {
       constructor(id: number, fileName: string, fileUrl: string) {
         // Provide dummy values for abstract Attachment's super constructor
-        super(0, '', '', new Date(), new Date(), 0, '', '', new Date(), '', '', id, fileName, fileUrl);
+        super(0, '', '', new Date(), new Date(), 0, '', '', new Date(), Priority.LOW, Status.TODO, id, fileName, fileUrl);
       }
       public getAttachmentDetails(): string {
         return `${this.getFileName()} (${this.getFileUrl()})`;
@@ -201,4 +200,17 @@ export class Task extends Project {
   markComplete(): void {
     this.status = Status.DONE;
   }
+}
+
+// Define enums directly here if the imported files are empty
+export enum Priority {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH'
+}
+
+export enum Status {
+  TODO = 'TODO',
+  IN_PROGRESS = 'IN_PROGRESS',
+  DONE = 'DONE'
 }

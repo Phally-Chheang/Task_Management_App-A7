@@ -1,11 +1,11 @@
-import { Task } from "./Task";
+import { Task, Priority, Status } from "./Task";
 import { Comment } from "./Comment";
 import { Attachment } from "./Attachment";
 import { Notification } from "../activity/Notification";
 import { Label } from "../project/Label";
 import { User } from "../user/User";
-import { Priority} from "./Priority";
-import { Status} from "./Status";
+
+
 
 export class Reminder extends Task {
   private reminderId: number;

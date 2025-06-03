@@ -1,4 +1,4 @@
-import { Task } from "./Task";
+import { Task, Priority, Status } from "./Task";
 
 export abstract class Attachment extends Task{
     private attachmentId: number;
@@ -15,8 +15,8 @@ export abstract class Attachment extends Task{
         title: string,
         description: string,
         dueDate: Date,
-        priority: string,
-        status: string,
+        priority: Priority,
+        status: Status,
         attachmentId: number,
         fileName: string,
         fileUrl: string

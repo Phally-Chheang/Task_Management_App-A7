@@ -1,4 +1,4 @@
-import { Task } from "./Task";
+import { Task, Priority, Status } from "./Task";
 
 export class Comment extends Task {
   private commentId: number;
@@ -18,8 +18,8 @@ export class Comment extends Task {
     title: string,
     description: string,
     dueDate: Date,
-    priority: string,
-    status: string
+    priority: Priority,
+    status: Status
   ) {
     super(
       projectId,
