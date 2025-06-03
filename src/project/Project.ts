@@ -93,12 +93,12 @@ export class Project {
         const completed = this.getCompletedTasks().length.toString();
         const pending = this.getPendingTasks(new Date()).length.toString();
 
-        const report: Report = {
-            reportId: Date.now(),
-            month: new Date().toLocaleString('default', { month: 'long' }),
-            completedTasks: completed,
-            pendingTasks: pending,
-        };
+        const report = new Report(
+            Date.now(),
+            new Date().toLocaleString('default', { month: 'long' }),
+            completed,
+            pending
+        );
 
         this.reports.push(report);
         return report;
