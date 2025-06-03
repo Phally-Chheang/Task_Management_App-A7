@@ -1,4 +1,5 @@
-import { Task, Priority, Status } from "./Task";
+import { Task } from "./Task";
+import { Priority, Status } from "../common/enums";
 
 export abstract class Attachment extends Task{
     private attachmentId: number;

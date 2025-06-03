@@ -1,9 +1,10 @@
-import { Task, Priority, Status } from "./Task";
+import { Task,  } from "./Task";
 import { Comment } from "./Comment";
 import { Attachment } from "./Attachment";
 import { Notification } from "../activity/Notification";
 import { Label } from "../project/Label";
 import { User } from "../user/User";
+import { Priority, Status } from "../common/enums";
 
 
 

@@ -6,6 +6,7 @@ import { Attachment } from "./Attachment";
 import { Notification } from "../activity/Notification";
 import { Label } from "../project/Label";
 import { User } from "../user/User";
+import { Priority, Status } from "../common/enums";
 
 export class Task extends Project {
   private taskId: number;
@@ -202,15 +203,4 @@ export class Task extends Project {
   }
 }
 
-// Define enums directly here if the imported files are empty
-export enum Priority {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH'
-}
 
-export enum Status {
-  TODO = 'TODO',
-  IN_PROGRESS = 'IN_PROGRESS',
-  DONE = 'DONE'
-}
