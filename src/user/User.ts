@@ -1,5 +1,5 @@
 // ↙ User.ts ↘
-import { Role } from ".Role";
+import { Role } from "./Role";
 import { Team } from "./Team";
 import { Project } from "../project/Project";
 import { Task } from "../task_management/Task";
