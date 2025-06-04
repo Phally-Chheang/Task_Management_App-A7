@@ -28,13 +28,13 @@ export abstract class User {
     role: Role,
     team?: Team
   ) {
-    this.userId   = userId;
-    this.name     = name;
-    this.email    = email;
+    this.userId = userId;
+    this.name = name;
+    this.email = email;
     this.password = password;
     this.projects = projects ?? [];
-    this.role     = role;
-    this.team     = team;
+    this.role = role;
+    this.team = team;
   }
 
   abstract displayInfo(): void;
@@ -105,7 +105,7 @@ export abstract class User {
       project.getDescription(),
       project.getStartDate(),
       project.getEndDate(),
-      Date.now(),                         
+      Date.now(),
       taskData.title,
       taskData.description,
       taskData.dueDate,
@@ -119,9 +119,10 @@ export abstract class User {
   }
 
   assignTask(task: Task, user: User): void {
-    const projectWithTask = this.projects.find((project) =>
-      project.getTasks().includes(task)
-    );
+    const projectWithTask = this.projects.find((project) => {
+      const tasks = project.getTasks();
+      return Array.isArray(tasks) && tasks.some((t) => t.getTaskId() === task.getTaskId());
+    });
     if (!projectWithTask) {
       throw new Error("Task does not belong to any of the user's projects.");
     }
@@ -136,32 +137,48 @@ export abstract class User {
     }
   }
 
-  getReminders(): Reminder[] {
-    const now = new Date("2025-06-01T01:09:00+07:00");
-    return this.projects
-      .flatMap((project) => project.getTasks())
-      .filter((task) => task.getAssignedUsers().includes(this))
-      .flatMap((task) => task.getReminders())
-      .filter(
-        (reminder) =>
-          !reminder.isAcknowledged() && reminder.getRemindAt() > now
-      );
-  }
+getReminders(): Reminder[] {
+  const now = new Date();
+  return this.projects
+    .reduce<Task[]>((allTasks, project: Project) => {
+      const tasks = project.getTasks();
+      return allTasks.concat(Array.isArray(tasks) ? tasks : []);
+    }, [])
+    .filter((task: Task) => {
+      const assignedUsers = task.getAssignedUsers();
+      return Array.isArray(assignedUsers) && 
+             assignedUsers.some((user: User) => user.getUserId() === this.getUserId());
+    })
+    .reduce<Reminder[]>((allReminders, task: Task) => {
+      const reminders = task.getReminders();
+      return allReminders.concat(Array.isArray(reminders) ? reminders : []);
+    }, [])
+    .filter((reminder: Reminder) =>
+      !reminder.isAcknowledged() && reminder.getRemindAt() > now
+    );
+}
 
   getDashboardData(): { completed: number; pending: number; overdue: number } {
-    const now = new Date("2025-06-01T01:09:00+07:00");
+    const now = new Date();
     let completed = 0;
     let pending = 0;
     let overdue = 0;
 
     this.projects.forEach((project) => {
-      project.getTasks().forEach((task) => {
-        if (task.getAssignedUsers().includes(this)) {
-          if (task.getStatus() === Status.DONE) completed++;
-          else if (task.getDueDate() < now) overdue++;
-          else pending++;
-        }
-      });
+      const tasks = project.getTasks();
+      if (Array.isArray(tasks)) {
+        tasks.forEach((task) => {
+          const assignedUsers = task.getAssignedUsers();
+          if (
+            Array.isArray(assignedUsers) &&
+            assignedUsers.some((user) => user.getUserId() === this.getUserId())
+          ) {
+            if (task.getStatus() === Status.DONE) completed++;
+            else if (task.getDueDate() < now) overdue++;
+            else pending++;
+          }
+        });
+      }
     });
 
     return { completed, pending, overdue };
@@ -172,19 +189,26 @@ export abstract class User {
     pendingTasks: Task[];
     overdueTasks: Task[];
   } {
-    const now = new Date("2025-06-01T01:09:00+07:00");
+    const now = new Date();
     const completedTasks: Task[] = [];
     const pendingTasks: Task[] = [];
     const overdueTasks: Task[] = [];
 
     this.projects.forEach((project) => {
-      project.getTasks().forEach((task) => {
-        if (task.getAssignedUsers().includes(this)) {
-          if (task.getStatus() === Status.DONE) completedTasks.push(task);
-          else if (task.getDueDate() < now) overdueTasks.push(task);
-          else pendingTasks.push(task);
-        }
-      });
+      const tasks = project.getTasks();
+      if (Array.isArray(tasks)) {
+        tasks.forEach((task) => {
+          const assignedUsers = task.getAssignedUsers();
+          if (
+            Array.isArray(assignedUsers) &&
+            assignedUsers.some((user) => user.getUserId() === this.getUserId())
+          ) {
+            if (task.getStatus() === Status.DONE) completedTasks.push(task);
+            else if (task.getDueDate() < now) overdueTasks.push(task);
+            else pendingTasks.push(task);
+          }
+        });
+      }
     });
 
     return { completedTasks, pendingTasks, overdueTasks };
@@ -195,9 +219,10 @@ export abstract class User {
     content: string,
     createdAt: Date
   ): Comment {
-    const projectWithTask = this.projects.find((project) =>
-      project.getTasks().includes(task)
-    );
+    const projectWithTask = this.projects.find((project) => {
+      const tasks = project.getTasks();
+      return Array.isArray(tasks) && tasks.some((t) => t.getTaskId() === task.getTaskId());
+    });
     if (!projectWithTask) {
       throw new Error("Task does not belong to any of the user's projects.");
     }
@@ -222,9 +247,10 @@ export abstract class User {
     fileName: string,
     fileUrl: string
   ): Attachment {
-    const projectWithTask = this.projects.find((project) =>
-      project.getTasks().includes(task)
-    );
+    const projectWithTask = this.projects.find((project) => {
+      const tasks = project.getTasks();
+      return Array.isArray(tasks) && tasks.some((t) => t.getTaskId() === task.getTaskId());
+    });
     if (!projectWithTask) {
       throw new Error("Task does not belong to any of the user's projects.");
     }
