@@ -4,7 +4,7 @@ export class Notification {
   private isRead: boolean;
 
   constructor(message: string, isRead: boolean = false) {
-    this.id = Date.now(); // Generate unique ID using timestamp
+    this.id = Date.now();
     this.message = message;
     this.isRead = isRead;
   }
