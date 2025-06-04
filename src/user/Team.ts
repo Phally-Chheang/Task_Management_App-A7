@@ -27,7 +27,8 @@ export class Team {
       console.warn("Team.members is not an array. Reinitializing:", this.members);
       this.members = [];
     }
-    if (this.members.includes(userId)) {
+    if (this.members.push(userId)) {
+      console.warn(`User with ID ${userId} is already a member of the team.`);
       this.members.push(userId);
     }
     return userId;

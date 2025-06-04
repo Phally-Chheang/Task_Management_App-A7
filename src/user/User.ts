@@ -12,11 +12,11 @@ import { Priority, Status } from "../common/enums";
 
 export abstract class User {
   private userId: number;
-  private name: string;
-  private email: string;
+    name: string;
+    email: string;
   private password: string;
   private projects: Project[];
-  private role: Role;
+    role: Role;
   private team?: Team;
 
   constructor(
@@ -157,6 +157,19 @@ getReminders(): Reminder[] {
       !reminder.isAcknowledged() && reminder.getRemindAt() > now
     );
 }
+
+logIn (): {name: string, email: string, password: string} {
+    if (!this.email || !this.password) {
+      throw new Error("Email and password are required for login.");
+    }
+    console.log(`${this.name} has logged in.`);
+    return{name : this.name, email: this.email, password: this.password};
+    
+}
+logOut(): void {
+    console.log(`${this.name} has logged out.`);
+}
+    
 
   getDashboardData(): { completed: number; pending: number; overdue: number } {
     const now = new Date();
