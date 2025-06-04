@@ -57,9 +57,11 @@ export class Task extends Project {
   }
 
   assignUser(user: User): void {
-    if (!this.assignedUsers.includes(user)) {
+    // assign a user to the task
+    if (!this.assignedUsers.some(u => u.getUserId() === user.getUserId())) {
       this.assignedUsers.push(user);
     }
+    
   }
 
   getAssignedUsers(): User[] {
