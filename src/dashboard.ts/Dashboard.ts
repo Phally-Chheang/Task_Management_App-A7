@@ -3,10 +3,10 @@ import { Status } from "../common/enums";
 
 export class Dashboard {
   constructor(
-    public status: Status,
-    public notifications: Notification[] = [],
-    public completionRate: number = 0,
-    public overdueTasksCount: number = 0
+    private status: Status,
+    private notifications: Notification[] = [],
+    private completionRate: number = 0,
+    private overdueTasksCount: number = 0
   ) {}
 
   // Update dashboard status based on tasks
