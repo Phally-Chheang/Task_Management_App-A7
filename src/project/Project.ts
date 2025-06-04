@@ -3,6 +3,9 @@ import { Report } from "../activity/Report";
 import { User } from "../user/User";
 
 export class Project {
+    getProjectName(): string {
+      throw new Error("Method not implemented.");
+    }
     protected projectId: number;
     protected name: string;
     protected description: string;
@@ -93,12 +96,12 @@ export class Project {
         const completed = this.getCompletedTasks().length.toString();
         const pending = this.getPendingTasks(new Date()).length.toString();
 
-        const report: Report = {
-            reportId: Date.now(),
-            month: new Date().toLocaleString('default', { month: 'long' }),
-            completedTasks: completed,
-            pendingTasks: pending,
-        };
+        const report = new Report(
+            Date.now(),
+            new Date().toLocaleString('default', { month: 'long' }),
+            completed,
+            pending
+        );
 
         this.reports.push(report);
         return report;
