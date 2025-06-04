@@ -6,6 +6,7 @@ import { Task } from "../task_management/Task";
 import { Comment } from "../task_management/Comment";
 import { Attachment } from "../task_management/Attachment";
 import { Reminder } from "../task_management/Reminder";
+import { ActivityLog } from "../activity/ActivityLog";  
 
 import { Priority, Status } from "../common/enums";
 
