@@ -1,29 +1,69 @@
+// Import the Project class
+import { Project } from "../project/Project";
+
 export class Report {
-    private reportId: number;
-    private month: string;
-    private completedTasks: string;
-    private pendingTasks: string;
+  // Properties
+  private reportId: number;
+  private reportName: string;
+  private completedTasks: number;
+  private pendingTasks: number;
+  private createdAt: Date;
 
-    constructor(reportId: number, month: string, completedTasks: string, pendingTasks: string) {
-        this.reportId = reportId;
-        this.month = month;
-        this.completedTasks = completedTasks;
-        this.pendingTasks = pendingTasks;
-    }
+  // Constructor to create a new Report
+  constructor(
+    reportId: number,
+    reportName: string,
+    completedTasks: number,
+    pendingTasks: number,
+    createdAt: Date = new Date()
+  ) {
+    this.reportId = reportId;
+    this.reportName = reportName;
+    this.completedTasks = completedTasks;
+    this.pendingTasks = pendingTasks;
+    this.createdAt = createdAt;
+  }
 
-    getReportId(): number {
-        return this.reportId;
-    }
+  // Get methods
+  getReportId(): number {
+    return this.reportId;
+  }
 
-    getMonth(): string {
-        return this.month;
-    }
+  getReportName(): string {
+    return this.reportName;
+  }
 
-    getCompletedTasks(): string {
-        return this.completedTasks;
-    }
+  getCompletedTasks(): number {
+    return this.completedTasks;
+  }
 
-    getPendingTasks(): string {
-        return this.pendingTasks;
-    }
+  getPendingTasks(): number {
+    return this.pendingTasks;
+  }
+
+  getCreatedAt(): Date {
+    return this.createdAt;
+  }
+
+  // Set methods
+  setReportName(name: string): void {
+    this.reportName = name;
+  }
+
+  setCompletedTasks(count: number): void {
+    this.completedTasks = count;
+  }
+
+  setPendingTasks(count: number): void {
+    this.pendingTasks = count;
+  }
+
+  // Show report details
+  generateReport(project: Project): string {
+    return `Report Name: ${this.reportName}
+            Project Name: ${project.getName()}
+            Completed Tasks: ${this.completedTasks}
+            Pending Tasks: ${this.pendingTasks}
+            Created At: ${this.createdAt.toLocaleDateString()}`;
+  }
 }
