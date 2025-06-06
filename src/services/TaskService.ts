@@ -1,21 +1,14 @@
-import { Task } from "../models/Task";
-import { User } from "../models/User";
-import { Comment } from "../models/Comment";
+import { Task } from "../task-management/Task";
+import { User } from "../user/User";
+import { Comment } from "../task-management/Comment";
 
 export class TaskService {
   setPriority(priority: string): void {
-    // Set the priority for a task (for demo, set all tasks to this priority)
-    // In a real app, you would likely pass a Task object and update it
-    // Here, let's assume we want to set the priority for all tasks, or you can adjust as needed
-    // For now, let's just log and do nothing, or you can throw if you want to enforce usage
-    // But to match your app.ts usage, let's update the method to accept a Task and a priority
-    // So, let's overload or change the method signature:
-    // setPriority(task: Task, priority: string): void
-    // But to avoid breaking, let's just log for now
+    // This method would typically set the priority for a task or a set of tasks.
     console.log(`Set priority called with: ${priority}`);
   }
   assignTask(task: Task, user: User): string {
-    return `Task "${task.title}" assigned to ${user.name}`;
+    return `Task "${task.title}" assigned to ${user.getName()}`;
   }
 
   getUpcomingTasks(tasks: Task[]): Task[] {

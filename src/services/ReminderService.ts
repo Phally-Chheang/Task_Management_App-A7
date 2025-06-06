@@ -1,9 +1,9 @@
-import { Reminder } from "../models/Reminder";
+import { Reminder } from "../task-management/Reminder";
 
 export class ReminderService {
   sendReminder(reminder: Reminder): string {
     const now = new Date();
-    if (reminder.isSet && reminder.remindAt <= now) {
+    if (reminder.isSet() && reminder.remindAt <= now) {
       return `Reminder: ${reminder.message}`;
     }
     return `No reminder due.`;
