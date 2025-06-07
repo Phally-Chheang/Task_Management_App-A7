@@ -1,6 +1,8 @@
-export class Label {
-  constructor(
-    public labelId: number,
-    public name: string
-  ) {}
+import { Task } from "../task-management/Task";
+
+export enum Label {
+  DESIGN = "Design",
+  DEV = "Development",
+  TEST = "Testing"
+  
 }
